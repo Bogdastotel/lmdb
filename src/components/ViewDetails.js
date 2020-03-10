@@ -4,6 +4,10 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
+const net = "http://192.168.0.74:8000";
+
+// const net = "https://ac239f73.ngrok.io";
+
 export default function ViewDetails({ props, match }) {
   useEffect(() => {
     fetchItem();
@@ -11,12 +15,7 @@ export default function ViewDetails({ props, match }) {
   }, []);
 
   const fetchItem = async () => {
-    const fetchItem = await fetch(
-      // `https://api.themoviedb.org/3/movie/${match.params.id}?api_key=78a4b48716787650faf80366a4cfe99a`
-      // `http://192.168.0.74:8000/api/videos/${match.params.id}`
-      // `http://25.64.100.106/:8000/api/videos/${match.params.id}`
-      `http://25.32.37.187:8000/api/videos/${match.params.id}`
-    );
+    const fetchItem = await fetch(`${net}/api/videos/${match.params.id}`);
 
     const item = await fetchItem.json();
     setItem(item);
@@ -25,17 +24,22 @@ export default function ViewDetails({ props, match }) {
   };
   const [item, setItem] = useState({
     artists: [],
-    director: [{}]
+    director: [{}],
+    genres: [{}],
+    seasons: [{}],
+    type: {}
   });
 
   let history = useHistory();
   const goBack = () => {
-    history.push("/TopMovies");
+    history.goBack();
   };
 
   return (
-    <Container style={{ backgroundColor: "#1D1D1D", color: "#B0B0B0" }}>
-      <h2 style={{ margin: "20px 0", color: "white" }}>{item.name}</h2>
+    <Container style={{ color: "#B0B0B0" }}>
+      <h2 style={{ margin: "20px 0", color: "white" }}>
+        {item.name} {item.video_type_id === 2 ? "(TV Show)" : "(Movie)"}
+      </h2>
 
       <Row className="justify-content-start">
         <Col md="3" className="pl-0 pr-1">
@@ -43,7 +47,7 @@ export default function ViewDetails({ props, match }) {
             width="100%"
             height="100%"
             style={{ display: "inline-block" }}
-            src={`${item.poster}`}
+            src={item.poster}
             alt="item_pic"
           />
         </Col>
@@ -72,6 +76,36 @@ export default function ViewDetails({ props, match }) {
           </div>
         </Col>
       </Row>
+
+      <p>
+        <strong style={{ color: "white" }}>Genres: </strong>{" "}
+        {item.genres.map((genre, index) => (
+          <span key={index} className="ml-2">
+            {genre.name}
+          </span>
+        ))}
+      </p>
+
+      {item.seasons.length > 0 ? (
+        <p>
+          <strong style={{ color: "white" }}>Seasons: </strong>{" "}
+          {item.seasons.length}
+        </p>
+      ) : null}
+
+      {item.video_type_id !== 1
+        ? item.seasons.map((season, index) => (
+            <p style={{ color: "white" }} key={index}>
+              <strong>
+                {" "}
+                Season {index + 1} Episodes:
+                <span style={{ color: "#B0B0B0" }} className="ml-2">
+                  {season.episodes}
+                </span>
+              </strong>
+            </p>
+          ))
+        : null}
 
       <p style={{ width: "500px", marginTop: "20px" }}>
         <strong style={{ color: "white" }}>Movie Overview: </strong> {item.plot}

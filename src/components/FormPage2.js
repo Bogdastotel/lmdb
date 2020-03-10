@@ -63,7 +63,7 @@ class FormPage2 extends Component {
             name="release_date"
             onChange={this.props.onChange}
           />
-          <Form.Text className="text-muted">example "1972-02-04"</Form.Text>
+          <Form.Text className="text-primary">example "1972-02-04"</Form.Text>
         </Form.Group>
 
         <Form.Group>
@@ -77,7 +77,7 @@ class FormPage2 extends Component {
             onChange={this.props.onChange}
             name="country"
           />
-          <Form.Text className="text-muted">example "Serbia"</Form.Text>
+          <Form.Text className="text-primary">example "Serbia"</Form.Text>
         </Form.Group>
 
         <Form.Group>
@@ -95,7 +95,7 @@ class FormPage2 extends Component {
           Previous step
         </Button>
         <p className="my-3">
-          <Button variant="outline-primary" onClick={this.props.nextStep}>
+          <Button variant="primary" onClick={this.props.nextStep}>
             Next step
           </Button>
         </p>

@@ -1,8 +1,11 @@
 import React, { Component } from "react";
-
+// import onClickOutside from "react-onclickoutside";
 import Ratings from "react-ratings-declarative";
 
 class RatingsVideos extends Component {
+  // handleClickOutside = evt => {
+  //   this.props.handleDel();
+  // };
   render() {
     return (
       <Ratings
@@ -27,3 +30,5 @@ class RatingsVideos extends Component {
 }
 
 export default RatingsVideos;
+
+// export default onClickOutside(RatingsVideos);

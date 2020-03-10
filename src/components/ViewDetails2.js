@@ -3,6 +3,10 @@ import { useHistory } from "react-router-dom";
 import { Container, Button, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
+const net = "http://192.168.0.74:8000";
+
+// const net = "https://ac239f73.ngrok.io";
+
 export default function ViewDetails2({ props, match }) {
   useEffect(() => {
     fetchItem();
@@ -10,21 +14,16 @@ export default function ViewDetails2({ props, match }) {
   }, []);
 
   const fetchItem = async () => {
-    const fetchItem = await fetch(
-      // `https://api.themoviedb.org/3/movie/${match.params.id}?api_key=78a4b48716787650faf80366a4cfe99a`
-      // `http://192.168.0.74:8000/api/videos/${match.params.id}`
-      `http://25.32.37.187:8000/api/videos/${match.params.id}`
-      // `http://25.64.100.106/:8000/api/videos/${match.params.id}`
-    );
+    const fetchItem = await fetch(`${net}/api/videos/${match.params.id}`);
 
     const item = await fetchItem.json();
     setItem(item);
 
-    console.log(item);
+    // console.log(item);
   };
   const [item, setItem] = useState({
     artists: [],
-    director: {},
+    director: [{}],
     genres: [{}],
     seasons: [{}],
     type: {}
@@ -36,7 +35,7 @@ export default function ViewDetails2({ props, match }) {
   };
 
   return (
-    <Container style={{ backgroundColor: "#1D1D1D", color: "#B0B0B0" }}>
+    <Container style={{ color: "#B0B0B0" }}>
       <h2 style={{ margin: "20px 0", color: "white" }}>
         {item.name} {item.video_type_id === 2 ? "(TV Show)" : "(Movie)"}
       </h2>
@@ -132,7 +131,8 @@ export default function ViewDetails2({ props, match }) {
             }
           }}
         >
-          {item.director.name}
+          {/* {console.log(item.director[0].surname)} */}
+          {item.director[0].name}
         </Link>
       </p>
       <p>

@@ -6,6 +6,8 @@ import FormPage2 from "./FormPage2";
 import axios from "axios";
 import FormPage3 from "./FormPage3";
 
+const net = "http://192.168.0.74:8000";
+
 class Admin extends Component {
   constructor(props) {
     super(props);
@@ -33,9 +35,9 @@ class Admin extends Component {
   }
 
   componentDidMount() {
-    let genres = "http://25.32.37.187:8000/api/genres";
-    let directors = "http://25.32.37.187:8000/api/artists/directors";
-    let artists = "http://25.32.37.187:8000/api/artists/actors";
+    let genres = "http://192.168.0.74:8000/api/genres";
+    let directors = "http://192.168.0.74:8000/api/artists/directors";
+    let artists = "http://192.168.0.74:8000/api/artists/actors";
 
     const requestGenres = axios.get(genres);
     const requestDirectors = axios.get(directors);
@@ -88,8 +90,10 @@ class Admin extends Component {
 
   handleChangeActors = actors => {
     let actorsMapped = actors.map(actor => actor.value);
-    this.setState({ artists: actorsMapped });
-    console.log("artists ", actorsMapped);
+
+    this.setState({ artists: actorsMapped }, () =>
+      console.log("artists ", actorsMapped)
+    );
   };
 
   onChangeEpisodes = (index, value) => {
@@ -102,8 +106,6 @@ class Admin extends Component {
   };
 
   formUpload = event => {
-    event.preventDefault();
-
     const fd = new FormData();
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -131,7 +133,7 @@ class Admin extends Component {
     fd.append("video_type_id", this.state.video_type_id);
 
     axios
-      .post("http://25.32.37.187:8000/api/videos", fd, {
+      .post(`${net}/api/videos`, fd, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -140,6 +142,7 @@ class Admin extends Component {
       })
       .then(res => {
         console.log(res);
+        alert("video successfully uploaded!");
       })
       .catch(function(error) {
         console.log(error);

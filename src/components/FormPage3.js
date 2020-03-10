@@ -37,7 +37,7 @@ class FormPage3 extends Component {
               onChange={this.props.onChange}
               value={this.props.trailer}
             />
-            <Form.Text className="text-muted">
+            <Form.Text className="text-primary">
               Needs to start with: https://www.youtube.com/embed/
             </Form.Text>
           </Form.Group>

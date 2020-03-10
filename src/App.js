@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./components/Home";
 import { NoMatch } from "./components/NoMatch";
 import { Layout } from "./components/Layout";
@@ -21,6 +16,8 @@ import SearchedDirectorDetails from "./components/SearchedDirectorDetails";
 import Admin from "./components/Admin";
 import Registration from "./components/Registration";
 import MyProvider from "./components/MyProvider";
+import Watchlist from "./components/Watchlist";
+import UserProfile from "./components/UserProfile";
 
 // import { Container } from "react-bootstrap";
 
@@ -79,7 +76,9 @@ class App extends React.Component {
               <Route path="/Registration" exact component={Registration} />
               <Route path="/SearchedMovieList/:id" component={ViewDetails2} />
               <Route path="/SignIn" component={SignIn} />
+              <Route path="/Watchlist" component={Watchlist} />
               <Route path="/Admin" component={Admin} />
+              <Route path="/UserProfile" component={UserProfile} />
               <Route path="/" component={Home} />
 
               <Route component={NoMatch} />

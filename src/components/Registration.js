@@ -3,7 +3,8 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import Cookies from "js-cookie";
+
+const net = "http://192.168.0.74:8000";
 
 class Registration extends Component {
   state = {
@@ -33,7 +34,7 @@ class Registration extends Component {
 
     // "http://25.32.37.187:8000/api/login"
     axios
-      .get("http://25.32.37.187:8000/user/register", this.state, {
+      .post(`${net}/api/register`, this.state, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json"
@@ -43,6 +44,7 @@ class Registration extends Component {
       .then(response => {
         // return  response;
         console.log(response);
+        this.props.history.push("SignIn");
       })
       .catch(error => {
         //return  error;

@@ -4,19 +4,24 @@ import { Container, Row, Col } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import star from "../assets/star.png";
-import empty_star from "../assets/empty_star.png";
-import deleteRatings from "../assets/deleteRatings.png";
 import Pagination from "react-bootstrap/Pagination";
-import RatingsVideos from "./RatingsVideos";
 import { MyContext } from "./MyContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusSquare, faCheckSquare } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-regular-svg-icons";
 import ReactTooltip from "react-tooltip";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import RatingsVideosContainer from "./RatingsVideosContainer";
 
 const paddingTop = {
   paddingTop: "35px"
 };
+
+const net = "http://192.168.0.74:8000";
+
+// const net = "https://ac239f73.ngrok.io";
+toast.configure();
 
 class TopMovies extends Component {
   constructor(props) {
@@ -39,12 +44,7 @@ class TopMovies extends Component {
     const user = JSON.parse(localStorage.getItem("user"));
 
     axios
-      .get(
-        // `https://api.themoviedb.org/3/movie/top_rated?api_key=${this.api}&language=en-US&page=1`
-
-        "http://25.32.37.187:8000/api/videos/top"
-        // "http://6aec7fc2.eu.ngrok.io/api/videos/top"
-      )
+      .get(`${net}/api/videos/top`)
       .then(response => {
         this.setState(
           {
@@ -64,17 +64,13 @@ class TopMovies extends Component {
 
     if (user !== null) {
       axios
-        .get(
-          "http://25.32.37.187:8000/api/user",
-
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${user.token}`
-            }
+        .get(`${net}/api/user/watchlistId`, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`
           }
-        )
+        })
         .then(res => {
           this.setState(
             {
@@ -89,6 +85,10 @@ class TopMovies extends Component {
     }
   }
 
+  notify = () => {
+    toast.info("Basic notification");
+  };
+
   changeRating = newRating => {
     const user = JSON.parse(localStorage.getItem("user"));
     //
@@ -100,7 +100,7 @@ class TopMovies extends Component {
       () =>
         axios
           .post(
-            "http://25.32.37.187:8000/api/user/rate",
+            `${net}/api/user/rate`,
             {
               video_id: this.state.selectedVideoForRating,
               rate: this.state.rating
@@ -112,6 +112,12 @@ class TopMovies extends Component {
                 Authorization: `Bearer ${user.token}`
               }
             }
+          )
+          .then(
+            toast.info("You rated a video!", {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 2000
+            })
           )
           .then(res => {
             console.log(res);
@@ -126,7 +132,7 @@ class TopMovies extends Component {
     const user = JSON.parse(localStorage.getItem("user"));
     axios
       .post(
-        "http://25.32.37.187:8000/api/user/unrate",
+        `${net}/api/user/unrate`,
         {
           video_id: movieId
         },
@@ -138,6 +144,12 @@ class TopMovies extends Component {
           }
         }
       )
+      .then(
+        toast.error("You deleted a rating for this video!", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000
+        })
+      )
       .then(res => {
         if (this.state.rating === 0) {
           this.setState({ selectedVideoForRating: -1 });
@@ -145,6 +157,7 @@ class TopMovies extends Component {
           this.setState({ rating: 0 }, () => console.log(res));
         }
       })
+
       .catch(function(error) {
         console.log(error);
       });
@@ -152,7 +165,7 @@ class TopMovies extends Component {
 
   selectForRating = movieId => {
     const user = JSON.parse(localStorage.getItem("user"));
-
+    // "http://25.32.37.187:8000/api/user/rates2"
     this.setState(
       {
         selectedVideoForRating: movieId,
@@ -161,7 +174,7 @@ class TopMovies extends Component {
       () =>
         axios
           .post(
-            "http://25.32.37.187:8000/api/user/rates2",
+            `${net}/api/user/rates2`,
             { video_id: movieId },
             {
               headers: {
@@ -195,17 +208,26 @@ class TopMovies extends Component {
     );
   };
 
+  handleDel = () => {
+    this.setState({
+      selectedVideoForRating: -1
+    });
+    console.log("clicked outside");
+  };
+
   addToWatchList = movieId => {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    let filteredArray = this.state.watchlist.filter(video => video !== movieId);
+    let filteredWatchlist = this.state.watchlist.filter(
+      video => video !== movieId
+    );
 
     if (user !== null) {
       if (this.state.watchlist.includes(movieId)) {
-        this.setState({ watchlist: filteredArray }, () =>
+        this.setState({ watchlist: filteredWatchlist }, () =>
           axios
             .post(
-              "http://25.32.37.187:8000/api/user/addToList",
+              `${net}/api/user/addToList`,
               {
                 video_id: movieId
               },
@@ -218,13 +240,16 @@ class TopMovies extends Component {
               }
             )
             .then(res => {
-              this.setState(
-                {
-                  watchlist: [...res.data.watchlist]
-                },
-                () => console.log(this.state.watchlist)
-              );
+              this.setState({
+                watchlist: [...res.data.watchlist]
+              });
             })
+            .then(
+              toast.error("You deleted a video from your watchlist!", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 2000
+              })
+            )
             .catch(function(error) {
               console.log(error);
             })
@@ -237,7 +262,7 @@ class TopMovies extends Component {
           () =>
             axios
               .post(
-                "http://25.32.37.187:8000/api/user/addToList",
+                `${net}/api/user/addToList`,
                 {
                   video_id: movieId
                 },
@@ -254,6 +279,12 @@ class TopMovies extends Component {
                   watchlist: [...res.data.watchlist]
                 });
               })
+              .then(
+                toast.success("You added a video to your watchlist!", {
+                  position: toast.POSITION.TOP_RIGHT,
+                  autoClose: 2000
+                })
+              )
               .catch(function(error) {
                 console.log(error);
               })
@@ -265,7 +296,7 @@ class TopMovies extends Component {
 
   firstPage = () => {
     axios
-      .get("http://25.32.37.187:8000/api/videos/top?page=1")
+      .get(`${net}/api/videos/top?page=1`)
       .then(response => {
         this.setState(
           {
@@ -285,10 +316,7 @@ class TopMovies extends Component {
 
   nextPage = () => {
     axios
-      .get(
-        `http://25.32.37.187:8000/api/videos/top?page=${this.state.activePage +
-          1}`
-      )
+      .get(`${net}/api/videos/top?page=${this.state.activePage + 1}`)
       .then(response => {
         this.setState(
           {
@@ -308,10 +336,7 @@ class TopMovies extends Component {
 
   previousPage = () => {
     axios
-      .get(
-        `http://25.32.37.187:8000/api/videos/top?page=${this.state.activePage -
-          1}`
-      )
+      .get(`${net}/api/videos/top?page=${this.state.activePage - 1}`)
       .then(response => {
         this.setState(
           {
@@ -331,9 +356,7 @@ class TopMovies extends Component {
 
   lastPage = () => {
     axios
-      .get(
-        `http://25.32.37.187:8000/api/videos/top?page=${this.state.lastPage}`
-      )
+      .get(`${net}/api/videos/top?page=${this.state.lastPage}`)
       .then(response => {
         this.setState(
           {
@@ -354,14 +377,14 @@ class TopMovies extends Component {
   render() {
     let active = this.state.activePage;
     let items = [];
-    for (let number = 1; number <= this.state.lastPage; number++) {
+    for (let number = 1; number <= 10; number++) {
       items.push(
         <Pagination.Item
           key={number}
           active={number === active}
           onClick={() => {
             axios
-              .get(`http://25.32.37.187:8000/api/videos/top?page=${number}`)
+              .get(`${net}/api/videos/top?page=${number}`)
               .then(response => {
                 this.setState(
                   {
@@ -384,7 +407,7 @@ class TopMovies extends Component {
       );
     }
     return (
-      <Container style={{ backgroundColor: "#1D1D1D" }} className="pb-3">
+      <Container className="pb-3">
         <Table variant="dark" striped bordered hover>
           <thead>
             <tr className="text-center">
@@ -451,27 +474,14 @@ class TopMovies extends Component {
                               <ReactTooltip place="bottom" effect="solid" />
                             </React.Fragment>
                           ) : (
-                            <div>
-                              <RatingsVideos
-                                rating_avg={movie.rating_avg}
-                                rating={this.state.rating}
-                                changeRating={this.changeRating}
-                              />
-
-                              <div style={{ display: "inline-block" }}>
-                                <img
-                                  src={deleteRatings}
-                                  onClick={() => this.deleteRating(movie.id)}
-                                  style={{
-                                    width: "20px",
-                                    marginLeft: "1rem",
-                                    cursor: "pointer",
-                                    paddingTop: "4px"
-                                  }}
-                                  alt="deleteRatings"
-                                />
-                              </div>
-                            </div>
+                            <RatingsVideosContainer
+                              movie={movie.id}
+                              handleDel={this.handleDel}
+                              rating_avg={movie.rating_avg}
+                              rating={this.state.rating}
+                              changeRating={this.changeRating}
+                              deleteRating={this.deleteRating}
+                            />
                           )
                         ) : (
                           <Link

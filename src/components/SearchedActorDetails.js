@@ -14,7 +14,6 @@ class SearchedActorDetails extends Component {
     return (
       <Container
         style={{
-          backgroundColor: "#1D1D1D",
           paddingLeft: "20px",
           paddingTop: "20px",
           color: "#B0B0B0"

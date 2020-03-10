@@ -1,19 +1,21 @@
-.navbar-nav span[role=button] {
-    padding: 15px;
-    display: inline-block;
-    line-height: 20px;
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
+
+/* .navbar-nav span[role="button"] {
+  padding: 15px;
+  display: inline-block;
+  line-height: 20px;
 }
 
 .nav-left {
-    margin-left: 600px;
+  margin-left: 600px;
 }
 
 .form-right {
-    margin-left: 500px;
+  margin-left: 500px;
 }
 
-.navbar-nav span[role=button] {
-    padding: 15px;
-    display: inline-block;
-    line-height: 20px;
-}
+.navbar-nav span[role="button"] {
+  padding: 15px;
+  display: inline-block;
+  line-height: 20px;
+} */

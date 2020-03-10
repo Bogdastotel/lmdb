@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar, Nav, Dropdown } from "react-bootstrap";
+import { Navbar, Nav, Dropdown, Container } from "react-bootstrap";
 import { Link, withRouter } from "react-router-dom";
 import "./navcss.css";
 import { Form, FormControl, Button } from "react-bootstrap";
@@ -61,8 +61,14 @@ class NavigationBar extends React.Component {
   };
   render() {
     return (
-      <Navbar style={{ backgroundColor: "#02122b" }} expand="lg">
-        <div className="container-fluid">
+      <Navbar
+        style={{
+          backgroundColor: "#02122b",
+          fontFamily: "Josefin Sans"
+        }}
+        expand="lg"
+      >
+        <Container>
           <Navbar.Brand>
             <Link to="/">
               <img src={imdb_logo} width="80" alt="logo" />
@@ -95,7 +101,7 @@ class NavigationBar extends React.Component {
                 onChange={this.handleChange}
                 placeholder="Search for movies, tv shows or actors"
                 className="mr-sm-2"
-                style={{ width: "540px" }}
+                style={{ width: "400px" }}
               />
               <Button
                 onClick={this.handleClick}
@@ -116,23 +122,25 @@ class NavigationBar extends React.Component {
                         icon={faUser}
                       />
                     ) : null}
-                    <Link to="/" className="ml-2">
+                    <Link to="/UserProfile" className="ml-2">
                       {context.name}
                     </Link>
                   </React.Fragment>
 
                   <React.Fragment>
                     {context.authenticated ? (
-                      <FontAwesomeIcon
-                        style={{ color: "blue" }}
-                        /* size="2x" */
-                        className="ml-3"
-                        icon={faPlusSquare}
-                      />
+                      <React.Fragment>
+                        <FontAwesomeIcon
+                          style={{ color: "blue" }}
+                          /* size="2x" */
+                          className="ml-3"
+                          icon={faPlusSquare}
+                        />
+                        <Link to="/Watchlist" className="ml-2">
+                          Watchlist
+                        </Link>
+                      </React.Fragment>
                     ) : null}
-                    <Link to="/" className="ml-2">
-                      Watchlist
-                    </Link>
                   </React.Fragment>
                 </React.Fragment>
               )}
@@ -175,7 +183,7 @@ class NavigationBar extends React.Component {
               )}
             </MyContext.Consumer>
           </Navbar.Collapse>
-        </div>
+        </Container>
       </Navbar>
     );
   }

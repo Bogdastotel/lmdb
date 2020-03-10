@@ -5,6 +5,10 @@ import Movie from "./Movie";
 import Pagination from "react-bootstrap/Pagination";
 import axios from "axios";
 
+const net = "http://192.168.0.74:8000";
+
+// const net = "https://ac239f73.ngrok.io";
+
 class SearchedMovieList extends React.Component {
   constructor(props) {
     super(props);
@@ -21,11 +25,7 @@ class SearchedMovieList extends React.Component {
 
   componentDidMount() {
     axios
-      .get(
-        // `http://192.168.0.74:8000/api/search/video?query=${this.state.term}`
-        `http://25.32.37.187:8000/api/videos/search?query=${this.state.term}`
-        // `http://25.64.100.106:8000/api/videos/search?query=${this.state.term}`
-      )
+      .get(`${net}/api/videos/search?query=${this.state.term}`)
       .then(res => {
         this.setState({
           searchedMovies: [...res.data.data],
@@ -46,11 +46,7 @@ class SearchedMovieList extends React.Component {
       console.log("... prevProps.key", prevProps.location.key);
       console.log("... this.props.key", this.props.location.key);
       axios
-        .get(
-          // `http://192.168.0.74:8000/api/search/video?query=${this.state.term}`
-          `http://25.32.37.187:8000/api/videos/search?query=${this.props.location.state.term}`
-          // `http://25.64.100.106:8000/api/videos/search?query=${this.state.term}`
-        )
+        .get(`${net}/api/videos/search?query=${this.props.location.state.term}`)
         .then(res => {
           this.setState({
             searchedMovies: [...res.data.data],
@@ -69,9 +65,7 @@ class SearchedMovieList extends React.Component {
 
   firstPage = () => {
     axios
-      .get(
-        `http://25.32.37.187:8000/api/videos/search?query=${this.state.term}&page=1`
-      )
+      .get(`${net}/api/videos/search?query=${this.state.term}&page=1`)
       .then(response => {
         this.setState(
           {
@@ -92,9 +86,8 @@ class SearchedMovieList extends React.Component {
   nextPage = () => {
     axios
       .get(
-        `http://25.32.37.187:8000/api/videos/search?query=${
-          this.state.term
-        }&page=${this.state.activePage + 1}`
+        `${net}/api/videos/search?query=${this.state.term}&page=${this.state
+          .activePage + 1}`
       )
       .then(response => {
         this.setState(
@@ -116,9 +109,8 @@ class SearchedMovieList extends React.Component {
   previousPage = () => {
     axios
       .get(
-        `http://25.32.37.187:8000/api/videos/search?query=${
-          this.state.term
-        }&page=${this.state.activePage - 1}`
+        `${net}/api/videos/search?query=${this.state.term}&page=${this.state
+          .activePage - 1}`
       )
       .then(response => {
         this.setState(
@@ -140,7 +132,7 @@ class SearchedMovieList extends React.Component {
   lastPage = () => {
     axios
       .get(
-        `http://25.32.37.187:8000/api/videos/search?query=${this.state.term}&page=${this.state.lastPage}`
+        `${net}/api/videos/search?query=${this.state.term}&page=${this.state.lastPage}`
       )
       .then(response => {
         this.setState(
@@ -162,7 +154,7 @@ class SearchedMovieList extends React.Component {
   render() {
     let active = this.state.activePage;
     let items = [];
-    for (let number = 1; number <= this.state.lastPage; number++) {
+    for (let number = 1; number <= 10; number++) {
       items.push(
         <Pagination.Item
           key={number}
@@ -170,7 +162,7 @@ class SearchedMovieList extends React.Component {
           onClick={() => {
             axios
               .get(
-                `http://25.32.37.187:8000/api/videos/search?query=${this.state.term}&page=${number}`
+                `${net}/api/videos/search?query=${this.state.term}&page=${number}`
               )
               .then(response => {
                 this.setState(
@@ -196,15 +188,24 @@ class SearchedMovieList extends React.Component {
       );
     }
     return (
-      <Container style={{ backgroundColor: "#1D1D1D", minHeight: "100vh" }}>
+      <Container style={{ minHeight: "100vh" }}>
         <Row className="justify-content-center">
           {this.state.searchedMovies.map(movie => {
             return (
-              <Col xs={3} key={movie.id} className="my-2 text-center">
-                <Movie key={movie.id} image={movie.poster} title={movie.name} />
+              <Col xs={3} key={movie.id} className="my-2  text-center">
+                <Movie
+                  key={movie.id}
+                  movie={movie.id}
+                  image={movie.poster}
+                  title={movie.name}
+                />
 
                 <Link
-                  style={{ display: "block", padding: "10px" }}
+                  style={{
+                    display: "block",
+                    padding: "10px",
+                    marginTop: "10px"
+                  }}
                   to={`/SearchedMovieList/${movie.id}`}
                 >
                   View Details
@@ -216,13 +217,15 @@ class SearchedMovieList extends React.Component {
         <Row className="justify-content-center">
           <Col md="4"></Col>
           <Col md="4">
-            <Pagination style={{ paddingLeft: "50px" }}>
-              <Pagination.First onClick={this.firstPage} />
-              <Pagination.Prev onClick={this.previousPage} />
-              {items}
-              <Pagination.Next onClick={this.nextPage} />
-              <Pagination.Last onClick={this.lastPage} />
-            </Pagination>
+            {items.length > 1 && (
+              <Pagination style={{ paddingLeft: "50px" }}>
+                <Pagination.First onClick={this.firstPage} />
+                <Pagination.Prev onClick={this.previousPage} />
+                {items}
+                <Pagination.Next onClick={this.nextPage} />
+                <Pagination.Last onClick={this.lastPage} />
+              </Pagination>
+            )}
           </Col>
           <Col md="4"></Col>
         </Row>

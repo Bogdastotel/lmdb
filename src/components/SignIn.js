@@ -5,10 +5,6 @@ import Button from "react-bootstrap/Button";
 import { MyContext } from "./MyContext";
 
 class SignIn extends React.Component {
-  state = {
-    redirectToRefferer: false
-  };
-
   render() {
     return (
       <MyContext.Consumer>

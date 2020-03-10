@@ -4,24 +4,51 @@ import { withRouter } from "react-router";
 import { MyContext } from "./MyContext";
 // import { Redirect } from "react-router-dom";
 
+const net = "http://192.168.0.74:8000";
+
+// const net = "https://ac239f73.ngrok.io";
+
 class MyProvider extends React.Component {
   state = {
     authenticated: false,
     email: "",
     password: "",
     name: "",
-    admin: 1
+    admin: 1,
+    loggedUserName: "",
+    id: "",
+    deleteProfile: false
   };
 
   componentDidMount() {
     const user = JSON.parse(localStorage.getItem("user"));
-
+    console.log(user);
     if (user) {
-      this.setState({
-        authenticated: true,
-        admin: user.admin,
-        name: user.name
-      });
+      // this.setState({
+      //   authenticated: true,
+      //   admin: user.admin,
+      //   name: user.name,
+      //   id: user.id
+      // });
+
+      // `${net}/api/user`
+      axios
+        .get(`${net}/api/user`, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`
+          }
+        })
+        .then(response => {
+          // console.log(response);
+          this.setState({
+            authenticated: true,
+            admin: response.data.role_id,
+            name: response.data.name,
+            id: response.data.id
+          });
+        });
     }
   }
 
@@ -40,10 +67,11 @@ class MyProvider extends React.Component {
       email: this.state.email,
       password: this.state.password
     };
+    // `${net}/api/login`
 
     // "http://25.32.37.187:8000/api/login"
     axios
-      .post("http://25.32.37.187:8000/api/login", user, {
+      .post(`${net}/api/login`, user, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json"
@@ -57,17 +85,19 @@ class MyProvider extends React.Component {
             authenticated: true,
             email: response.data.user.email,
             name: response.data.user.name,
-            admin: response.data.user.role_id
+            admin: response.data.user.role_id,
+            id: response.data.user.id
           },
-
-          localStorage.setItem(
-            "user",
-            JSON.stringify({
-              token: response.data.access_token,
-              name: response.data.user.name,
-              admin: response.data.user.role_id
-            })
-          )
+          () =>
+            localStorage.setItem(
+              "user",
+              JSON.stringify({
+                token: response.data.access_token,
+                name: response.data.user.name,
+                admin: response.data.user.role_id,
+                id: response.data.user.id
+              })
+            )
         );
 
         // browserHistory.push();
@@ -80,9 +110,10 @@ class MyProvider extends React.Component {
   };
 
   logout = () => {
+    // `${net}/api/logout`
     const user = JSON.parse(localStorage.getItem("user"));
     axios
-      .post("http://25.32.37.187:8000/api/logout", "", {
+      .post(`${net}/api/logout`, "", {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -104,6 +135,45 @@ class MyProvider extends React.Component {
     localStorage.removeItem("user");
   };
 
+  deleteCurrentUser = () => {
+    this.setState(prevState => ({
+      deleteProfile: !prevState.deleteProfile
+    }));
+  };
+
+  confirmDeleteCurrentUser = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    // `${net}/api/users/${this.state.id}`
+    axios
+      .delete(`${net}/api/users/${this.state.id}`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`
+        }
+      })
+      .then(response => {
+        console.log(response);
+
+        this.setState(
+          {
+            authenticated: false,
+            name: "",
+            admin: 1,
+            deleteProfile: false
+          },
+          () => localStorage.removeItem("user")
+        );
+      })
+      .then(this.props.history.push("SignIn"))
+      .catch(error => {
+        //return  error;
+        console.log(error);
+      });
+
+    alert("Profile succesfully deleted!");
+  };
+
   render() {
     return (
       <MyContext.Provider
@@ -111,11 +181,14 @@ class MyProvider extends React.Component {
           authenticated: this.state.authenticated,
           email: this.state.email,
           password: this.state.password,
+          deleteProfile: this.state.deleteProfile,
           name: this.state.name,
           admin: this.state.admin,
           logout: this.logout,
           login: this.login,
-          handleChange: this.handleChange
+          handleChange: this.handleChange,
+          deleteCurrentUser: this.deleteCurrentUser,
+          confirmDeleteCurrentUser: this.confirmDeleteCurrentUser
         }}
       >
         {this.props.children}
