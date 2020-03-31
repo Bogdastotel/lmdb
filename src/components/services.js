@@ -1,1 +1,3 @@
-const net = "http://192.168.0.74:8000";
+const net = "https://734c0057.ngrok.io";
+
+export default net;

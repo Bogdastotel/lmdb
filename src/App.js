@@ -18,6 +18,9 @@ import Registration from "./components/Registration";
 import MyProvider from "./components/MyProvider";
 import Watchlist from "./components/Watchlist";
 import UserProfile from "./components/UserProfile";
+import EditVideo from "./components/EditVideo";
+import EditActor from "./components/EditActor";
+import EditDirector from "./components/EditDirector";
 
 // import { Container } from "react-bootstrap";
 
@@ -79,6 +82,9 @@ class App extends React.Component {
               <Route path="/Watchlist" component={Watchlist} />
               <Route path="/Admin" component={Admin} />
               <Route path="/UserProfile" component={UserProfile} />
+              <Route path="/EditVideo" exact component={EditVideo} />
+              <Route path="/EditActor" exact component={EditActor} />
+              <Route path="/EditDirector" exact component={EditDirector} />
               <Route path="/" component={Home} />
 
               <Route component={NoMatch} />

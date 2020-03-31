@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import "./navcss.css";
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
@@ -40,27 +40,30 @@ class Movie extends Component {
           </h6>
         )}
         <Link to={`/SearchedMovieList/${this.props.movie}`}>
-          <img
-            src={this.props.image}
-            alt="movie_image"
-            width={200}
-            height={300}
-            style={{
-              transform: `${
-                this.state.hovered ? "scale(1.1,1.1)" : "scale(1,1)"
-              }`,
-              border: this.state.hovered
-                ? "5px solid #e3d800"
-                : "5px solid white"
-            }}
-            onMouseOver={() => this.setState({ hovered: true })}
-            onMouseLeave={() => this.setState({ hovered: false })}
-            onError={e => {
-              e.target.onerror = null;
-              e.target.src =
-                "https://upload.wikimedia.org/wikipedia/en/c/c3/The_Martian_2014.jpg";
-            }}
-          />
+          <div className="stream">
+            <img
+              className="stream__thumbnail"
+              src={this.props.image}
+              alt="movie_image"
+              width={200}
+              height={300}
+              /* style={{
+                transform: `${
+                  this.state.hovered ? "scale(1.1,1.1)" : "scale(1,1)"
+                }`,
+                border: this.state.hovered
+                  ? "5px solid #e3d800"
+                  : "5px solid white"
+              }} */
+              /* onMouseOver={() => this.setState({ hovered: true })}
+              onMouseLeave={() => this.setState({ hovered: false })} */
+              onError={e => {
+                e.target.onerror = null;
+                e.target.src =
+                  "https://upload.wikimedia.org/wikipedia/en/c/c3/The_Martian_2014.jpg";
+              }}
+            />
+          </div>
         </Link>
       </Container>
     );

@@ -4,7 +4,7 @@ import { Form, Button } from "react-bootstrap";
 class FormPage2 extends Component {
   render() {
     return (
-      <React.Fragment>
+      <div style={{ minHeight: "100vh" }}>
         <Form.Group>
           <Form.Label style={{ color: "white" }}>Video name</Form.Label>
           <Form.Control
@@ -63,7 +63,7 @@ class FormPage2 extends Component {
             name="release_date"
             onChange={this.props.onChange}
           />
-          <Form.Text className="text-primary">example "1972-02-04"</Form.Text>
+          <Form.Text className="text-primary">example "08.04.1987"</Form.Text>
         </Form.Group>
 
         <Form.Group>
@@ -99,7 +99,7 @@ class FormPage2 extends Component {
             Next step
           </Button>
         </p>
-      </React.Fragment>
+      </div>
     );
   }
 }

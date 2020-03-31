@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
+import { MyContext } from "./MyContext";
 
-class ActorDetails extends Component {
+class DirectorDetails extends Component {
   goBack = () => {
     this.props.history.push(`/TopMovies/${this.props.location.state.id}`);
   };
@@ -35,9 +36,30 @@ class ActorDetails extends Component {
         <Button variant="outline-primary" onClick={this.goBack}>
           Go back to video details
         </Button>
+
+        <MyContext.Consumer>
+          {context =>
+            context.admin === 2 ? (
+              <Button
+                variant="success"
+                className="ml-4"
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: "/EditDirector",
+                    state: {
+                      director: director[0]
+                    }
+                  })
+                }
+              >
+                Edit Director info
+              </Button>
+            ) : null
+          }
+        </MyContext.Consumer>
       </Container>
     );
   }
 }
 
-export default ActorDetails;
+export default DirectorDetails;

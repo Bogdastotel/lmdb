@@ -5,8 +5,10 @@ import FormPage1 from "./FormPage1";
 import FormPage2 from "./FormPage2";
 import axios from "axios";
 import FormPage3 from "./FormPage3";
+import net from "./services";
+// const net = "http://192.168.0.74:8000";
 
-const net = "http://192.168.0.74:8000";
+// const net = "https://56831765.ngrok.io";
 
 class Admin extends Component {
   constructor(props) {
@@ -35,9 +37,9 @@ class Admin extends Component {
   }
 
   componentDidMount() {
-    let genres = "http://192.168.0.74:8000/api/genres";
-    let directors = "http://192.168.0.74:8000/api/artists/directors";
-    let artists = "http://192.168.0.74:8000/api/artists/actors";
+    let genres = `${net}/api/genres`;
+    let directors = `${net}/api/artists/directors`;
+    let artists = `${net}/api/artists/actors`;
 
     const requestGenres = axios.get(genres);
     const requestDirectors = axios.get(directors);
@@ -106,6 +108,7 @@ class Admin extends Component {
   };
 
   formUpload = event => {
+    event.preventDefault();
     const fd = new FormData();
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -151,13 +154,12 @@ class Admin extends Component {
   render() {
     return (
       <Container
-        style={{ color: "white" }}
-        className="my-2 p-3 text-center"
+        style={{ color: "white", minHeight: "100vh" }}
+        className="p-3 text-center"
         /* style={{ backgroundColor: "#C5C6C6" }} */
       >
-        <h2>Welcome to Admin page</h2>
-
-        <section className="mt-5">
+        <section className="mt-2">
+          <h2>Welcome to Admin page</h2>
           <h4 className="p-3">Here you can add a new video!</h4>
           <Form
             style={{ width: "500px", margin: "0 auto", color: "black" }}

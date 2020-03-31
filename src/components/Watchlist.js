@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DeleteVideoFromWatchList from "./DeleteVideoFromWatchList";
 import RatingsVideosContainer from "./RatingsVideosContainer";
+import net from "./services";
 
 // import { dom } from "@fortawesome/fontawesome-svg-core";
 // import { confirmAlert } from "react-confirm-alert";
@@ -22,7 +23,9 @@ const paddingTop = {
   paddingTop: "35px"
 };
 
-const net = "http://192.168.0.74:8000";
+// const net = "http://192.168.0.74:8000";
+
+// const net = "https://1321eac5.ngrok.io";
 
 // const net = "https://ac239f73.ngrok.io";
 

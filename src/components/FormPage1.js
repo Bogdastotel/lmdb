@@ -47,7 +47,7 @@ class FormPage1 extends Component {
   };
   render() {
     return (
-      <React.Fragment>
+      <div style={{ minHeight: "100vh" }}>
         <Form.Group>
           <Form.Label style={{ color: "white" }}>Video type</Form.Label>
           <Form.Control
@@ -85,7 +85,7 @@ class FormPage1 extends Component {
             Next step
           </Button>
         </p>
-      </React.Fragment>
+      </div>
     );
   }
 }

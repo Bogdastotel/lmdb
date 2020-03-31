@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Container, Button, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import net from "./services";
+import axios from "axios";
+import { MyContext } from "./MyContext";
 
-const net = "http://192.168.0.74:8000";
+// const net = "http://192.168.0.74:8000";
 
-// const net = "https://ac239f73.ngrok.io";
+// const net = "https://56831765.ngrok.io";
 
 export default function ViewDetails2({ props, match }) {
   useEffect(() => {
@@ -33,6 +36,30 @@ export default function ViewDetails2({ props, match }) {
   const goBack = () => {
     history.goBack();
   };
+
+  const deleteVideo = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    axios
+      .delete(`${net}/api/videos/${match.params.id}`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`
+        }
+      })
+      .then(res => {
+        console.log(res);
+        alert("video successfully deleted!");
+      })
+      .then(setTimeout(() => history.push("/"), 2000))
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
+
+  // const goToEditVideo = () => {
+  //   history.push("/EditVideo");
+  // };
 
   return (
     <Container style={{ color: "#B0B0B0" }}>
@@ -158,6 +185,45 @@ export default function ViewDetails2({ props, match }) {
       <Button variant="outline-primary" onClick={goBack}>
         Go back
       </Button>
+      {/* <Link
+        to={{
+          pathname: "/EditVideo",
+          state: {
+            id: match.params.id
+          }
+        }}
+      >
+        Edit video
+      </Link> */}
+
+      <MyContext.Consumer>
+        {context =>
+          context.admin === 2 ? (
+            <div style={{ display: "inline-block" }}>
+              <Button
+                className="ml-4"
+                onClick={() =>
+                  history.push({
+                    pathname: "/EditVideo",
+                    state: {
+                      id: match.params.id
+                    }
+                  })
+                }
+              >
+                Edit Video
+              </Button>
+              <Button
+                variant="outline-danger"
+                className="ml-4"
+                onClick={deleteVideo}
+              >
+                Delete Video
+              </Button>
+            </div>
+          ) : null
+        }
+      </MyContext.Consumer>
     </Container>
   );
 }

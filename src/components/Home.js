@@ -1,208 +1,272 @@
 import React from "react";
-import { MyContext } from "./MyContext";
-import { Link, withRouter } from "react-router-dom";
-import { Container, Row, Col } from "react-bootstrap";
-import Movie from "./Movie";
-import Pagination from "react-bootstrap/Pagination";
+// import { MyContext } from "./MyContext";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import ReactPaginate from "react-paginate";
+import $ from "jquery";
+import "./navcss.css";
+import HomeVideos from "./HomeVideos";
 import axios from "axios";
+import net from "./services";
 
-const net = "http://192.168.0.74:8000";
+window.React = React;
 
-class Home extends React.Component {
-  constructor() {
-    super();
+// const net = "http://192.168.0.74:8000";
+
+// const net = "https://56831765.ngrok.io";
+
+export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      latestMovies: [],
-      activePage: null,
-      lastPage: null,
-      total: 70,
-      from: null,
-      to: null
+      data: [],
+      offset: 0,
+      url: `${net}/api/videos`,
+      perPage: 20,
+      genre: "",
+      order: "",
+      direction: "asc"
     };
   }
 
   componentDidMount() {
-    axios.get(`${net}/api/videos`).then(res => {
-      this.setState(
-        {
-          latestMovies: [...res.data.data],
-          activePage: res.data.current_page,
-          lastPage: res.data.last_page,
-          total: res.data.total,
-          from: res.data.from,
-          to: res.data.to
-        },
-        () => console.log(res)
-      );
+    this.loadVideosFromServer();
+
+    // axios.get(`${net}/api/genres`).then(res => {
+    //   console.log(res);
+    // });
+  }
+
+  loadVideosFromServer() {
+    $.ajax({
+      url: this.state.url,
+      data: { limit: this.state.perPage, offset: this.state.offset },
+      dataType: "json",
+      type: "GET",
+
+      success: data => {
+        this.setState({
+          data: data.videos,
+          pageCount: Math.ceil(data.total / 20)
+        });
+      },
+
+      error: (xhr, status, err) => {
+        console.error(this.state.url, status, err.toString()); // eslint-disable-line
+      }
     });
   }
 
-  firstPage = () => {
-    axios
-      .get(`${net}/api/videos?page=1`)
-      .then(response => {
-        this.setState(
-          {
-            latestMovies: [...response.data.data],
-            activePage: 1,
-            from: response.data.from,
-            to: response.data.to
-          },
-          () => console.log(response.data)
-        );
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+  handlePageClick = data => {
+    let selected = data.selected;
+    let offset = Math.ceil(selected * this.state.perPage);
+
+    this.setState({ offset: offset }, () => {
+      this.loadVideosFromServer();
+    });
     window.scrollTo(0, 0);
   };
 
-  nextPage = () => {
-    axios
-      .get(`${net}/api/videos?page=${this.state.activePage + 1}`)
-      .then(response => {
-        this.setState(
-          {
-            lastestMovies: [...response.data.data],
-            activePage: this.state.activePage + 1,
-            from: response.data.from,
-            to: response.data.to
-          },
-          () => console.log(response.data)
-        );
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-    window.scrollTo(0, 0);
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   };
 
-  previousPage = () => {
-    axios
-      .get(`${net}/api/videos?page=${this.state.activePage - 1}`)
-      .then(response => {
-        this.setState(
-          {
-            lastestMovies: [...response.data.data],
-            activePage: this.state.activePage - 1,
-            from: response.data.from,
-            to: response.data.to
-          },
-          () => console.log(response.data)
-        );
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-    window.scrollTo(0, 0);
+  handleOrderChange = e => {
+    this.setState(
+      {
+        [e.target.name]: e.target.value
+      },
+      () => console.log(this.state.order)
+    );
   };
 
-  lastPage = () => {
-    axios
-      .get(`${net}/api/videos?page=${this.state.lastPage}`)
-      .then(response => {
-        this.setState(
-          {
-            lastestMovies: [...response.data.data],
-            activePage: response.data.last_page,
-            from: response.data.from,
-            to: response.data.to
-          },
-          () => console.log(response.data)
-        );
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-    window.scrollTo(0, 0);
+  onGoClick = () => {
+    if (this.state.genre === "" && this.state.order !== "") {
+      axios
+        .get(
+          `${this.state.url}?offset=${this.state.offset}&limit=${this.state.perPage}&ord=${this.state.order}&dir=${this.state.direction}`
+        )
+        .then(res => {
+          this.setState(
+            {
+              data: [...res.data.videos],
+              pageCount: Math.ceil(res.data.total / 20)
+            },
+            () => console.log(res)
+          );
+        });
+    } else if (this.state.genre !== "" && this.state.order === "") {
+      axios
+        .get(
+          `${this.state.url}?offset=${this.state.offset}&limit=${this.state.perPage}&genre=${this.state.genre}&dir=${this.state.direction}`
+        )
+        .then(res => {
+          this.setState(
+            {
+              data: [...res.data.videos],
+              pageCount: Math.ceil(res.data.total / 20)
+            },
+            () => console.log(res)
+          );
+        });
+    } else {
+      axios
+        .get(
+          `${this.state.url}?offset=${this.state.offset}&limit=${this.state.perPage}&dir=${this.state.direction}`
+        )
+        .then(res => {
+          this.setState(
+            {
+              data: [...res.data.videos],
+              pageCount: Math.ceil(res.data.total / 20)
+            },
+            () => console.log(res)
+          );
+        });
+    }
   };
 
   render() {
-    let active = this.state.activePage;
-    let items = [];
-    for (let number = 1; number <= this.state.lastPage; number++) {
-      items.push(
-        <Pagination.Item
-          key={number}
-          active={number === active}
-          onClick={() => {
-            axios
-              .get(`${net}/api/videos?page=${number}`)
-              .then(response => {
-                this.setState(
-                  {
-                    latestMovies: [...response.data.data],
-                    activePage: response.data.current_page,
-                    from: response.data.from,
-                    to: response.data.to
-                  },
-                  () => console.log(response.data)
-                );
-              })
-              .catch(function(error) {
-                console.log(error);
-              });
-            window.scrollTo(0, 0);
-          }}
-        >
-          {number}
-        </Pagination.Item>
-      );
-    }
     return (
       <Container style={{ minHeight: "100vh" }}>
-        <MyContext.Consumer>
-          {context => (
-            <h3
-              style={{ color: "white", marginLeft: "220px" }}
-              className="mt-3"
-            >
-              Hello {context.name}, here is a list of latest added videos:
-            </h3>
-          )}
-        </MyContext.Consumer>
-        <Row className="justify-content-center">
-          {this.state.latestMovies.map(movie => {
-            return (
-              <Col xs={3} key={movie.id} className="my-2  text-center">
-                <Movie
-                  key={movie.id}
-                  movie={movie.id}
-                  image={movie.poster}
-                  title={movie.name}
-                />
-                <Link
-                  style={{
-                    display: "block",
-                    padding: "10px",
-                    marginTop: "10px"
-                  }}
-                  to={`/SearchedMovieList/${movie.id}`}
-                >
-                  View Details
-                </Link>
-              </Col>
-            );
-          })}
-        </Row>
-        <Row className="justify-content-center">
-          <Col md="4"></Col>
-          <Col md="4">
-            {/* {items.length > 1 && (
-              <Pagination style={{ paddingLeft: "10px" }}>
-                <Pagination.First onClick={this.firstPage} />
-                <Pagination.Prev onClick={this.previousPage} />
-                {items}
-                <Pagination.Next onClick={this.nextPage} />
-                <Pagination.Last onClick={this.lastPage} />
-              </Pagination>
-            )} */}
+        {/* <MyContext.Consumer>
+          {context =>
+            context.authenticated && (
+              <h3
+                style={{ color: "white", marginLeft: "220px" }}
+                className="mt-3"
+              >
+                Hello {context.name}, here is a list of latest added videos:
+              </h3>
+            )
+          }
+        </MyContext.Consumer> */}
+        <Row>
+          <Col
+            style={{
+              height: "100px",
+              display: "inline-block",
+              marginTop: "20px  "
+            }}
+          >
+            <Form.Group>
+              <Form.Label style={{ color: "white", textAlign: "center" }}>
+                Select by genre
+              </Form.Label>
+              <Form.Control
+                as="select"
+                value={this.state.genre}
+                onChange={this.handleChange}
+                name="genre"
+                style={{ width: "300px" }}
+              >
+                <option value="All">All</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Drama">Drama</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Horror">Horror</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Sports">Sports</option>
+                <option value="Biography">Biography</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Thriller">Thriller</option>
+              </Form.Control>
+            </Form.Group>
           </Col>
-          <Col md="4"></Col>
+          <Col
+            style={{
+              height: "100px",
+              marginTop: "20px"
+            }}
+          >
+            <Form.Group>
+              <Form.Label style={{ color: "white", textAlign: "center" }}>
+                Order by:
+              </Form.Label>
+              <Form.Control
+                as="select"
+                value={this.state.order}
+                onChange={this.handleChange}
+                name="order"
+                style={{ width: "300px" }}
+              >
+                <option value="All">All</option>
+                <option value="name">Name</option>
+                <option value="rating_avg">Rating</option>
+                <option value="release_date">Release date</option>
+                <option value="country">Country</option>
+                <option value="created_at">Created at</option>
+              </Form.Control>
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group>
+              <Form.Label
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  marginTop: "20px"
+                }}
+              >
+                Direction:
+              </Form.Label>
+              <Form.Control
+                as="select"
+                value={this.state.direction}
+                onChange={this.handleChange}
+                name="direction"
+                style={{ width: "300px" }}
+              >
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </Form.Control>
+            </Form.Group>
+          </Col>
+
+          <Col
+            style={{
+              display: "inline-block",
+              marginTop: "20px",
+              marginLeft: "10px"
+            }}
+          >
+            <Button onClick={this.onGoClick} style={{ marginTop: "30px" }}>
+              Search
+            </Button>
+          </Col>
+        </Row>
+
+        <HomeVideos data={this.state.data} />
+
+        <Row className="justify-content-end">
+          <Col xs="3"></Col>
+          <Col>
+            <ReactPaginate
+              previousLabel={"previous"}
+              nextLabel={"next"}
+              breakLabel={"..."}
+              pageCount={this.state.pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick}
+              containerClassName={"pagination"}
+              subContainerClassName={"pages pagination"}
+              activeClassName={"active"}
+              /* breakClassName={"break-me"} */
+              breakClassName={"page-item"}
+              breakLinkClassName={"page-link"}
+              pageClassName={"page-item"}
+              pageLinkClassName={"page-link"}
+              previousClassName={"page-item"}
+              previousLinkClassName={"page-link"}
+              nextClassName={"page-item"}
+              nextLinkClassName={"page-link"}
+              activeClassName={"active"}
+            />
+          </Col>
         </Row>
       </Container>
     );
   }
 }
-
-export default Home;

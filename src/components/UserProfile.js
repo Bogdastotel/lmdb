@@ -5,8 +5,9 @@ import { Button } from "react-bootstrap";
 import axios from "axios";
 import { MyContext } from "./MyContext";
 import ConfirmDeleteProfile from "./ConfirmDeleteProfile";
+import net from "./services";
 
-const net = "http://192.168.0.74:8000";
+// const net = "https://56831765.ngrok.io";
 
 export default class UserProfile extends Component {
   constructor() {

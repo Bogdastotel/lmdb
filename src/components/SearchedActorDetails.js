@@ -40,6 +40,20 @@ class SearchedActorDetails extends Component {
         <Button variant="outline-primary" onClick={this.goBack}>
           Go back
         </Button>
+        <Button
+          variant="success"
+          className="ml-4"
+          onClick={() =>
+            this.props.history.push({
+              pathname: "/EditActor",
+              state: {
+                artist: artist
+              }
+            })
+          }
+        >
+          Edit Actor info
+        </Button>
       </Container>
     );
   }

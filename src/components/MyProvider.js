@@ -3,10 +3,11 @@ import axios from "axios";
 import { withRouter } from "react-router";
 import { MyContext } from "./MyContext";
 // import { Redirect } from "react-router-dom";
+import net from "./services";
 
-const net = "http://192.168.0.74:8000";
+// const net = "http://192.168.0.74:8000";
 
-// const net = "https://ac239f73.ngrok.io";
+// const net = "https://56831765.ngrok.io";
 
 class MyProvider extends React.Component {
   state = {

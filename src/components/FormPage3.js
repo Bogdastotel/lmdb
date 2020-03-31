@@ -26,7 +26,7 @@ class FormPage3 extends Component {
     });
 
     return (
-      <React.Fragment>
+      <div style={{ minHeight: "100vh" }}>
         <Form.Group controlId="exampleForm.ControlSelect2">
           <Form.Group>
             <Form.Label style={{ color: "white" }}>Video trailer</Form.Label>
@@ -86,10 +86,10 @@ class FormPage3 extends Component {
             variant="primary"
             type="submit"
           >
-            Add video
+            Submit Video
           </Button>
         </p>
-      </React.Fragment>
+      </div>
     );
   }
 }

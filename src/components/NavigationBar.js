@@ -43,6 +43,8 @@ class NavigationBar extends React.Component {
       });
       // window.location.reload(false);
     }
+
+    // console.log(this.state.term);
   };
 
   handleKeyPress = event => {

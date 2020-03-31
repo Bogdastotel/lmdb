@@ -4,7 +4,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import star from "../assets/star.png";
-import Pagination from "react-bootstrap/Pagination";
+// import Pagination from "react-bootstrap/Pagination";
 import { MyContext } from "./MyContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusSquare, faCheckSquare } from "@fortawesome/free-solid-svg-icons";
@@ -13,14 +13,17 @@ import ReactTooltip from "react-tooltip";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RatingsVideosContainer from "./RatingsVideosContainer";
+import net from "./services";
+// require("bootstrap/less/bootstrap.less");
 
 const paddingTop = {
   paddingTop: "35px"
 };
 
-const net = "http://192.168.0.74:8000";
+// const net = "http://192.168.0.74:8000";
 
-// const net = "https://ac239f73.ngrok.io";
+// const net = "https://56831765.ngrok.io";
+
 toast.configure();
 
 class TopMovies extends Component {
@@ -48,12 +51,12 @@ class TopMovies extends Component {
       .then(response => {
         this.setState(
           {
-            topMovies: [...response.data.data],
-            activePage: response.data.current_page,
-            lastPage: response.data.last_page,
-            total: response.data.total,
-            from: response.data.from,
-            to: response.data.to
+            topMovies: [...response.data],
+            activePage: response.current_page,
+            lastPage: response.last_page,
+            total: response.total,
+            from: response.from,
+            to: response.to
           },
           () => console.log(response.data)
         );
@@ -294,118 +297,7 @@ class TopMovies extends Component {
     }
   };
 
-  firstPage = () => {
-    axios
-      .get(`${net}/api/videos/top?page=1`)
-      .then(response => {
-        this.setState(
-          {
-            topMovies: [...response.data.data],
-            activePage: 1,
-            from: response.data.from,
-            to: response.data.to
-          },
-          () => console.log(response.data)
-        );
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-    window.scrollTo(0, 0);
-  };
-
-  nextPage = () => {
-    axios
-      .get(`${net}/api/videos/top?page=${this.state.activePage + 1}`)
-      .then(response => {
-        this.setState(
-          {
-            topMovies: [...response.data.data],
-            activePage: this.state.activePage + 1,
-            from: response.data.from,
-            to: response.data.to
-          },
-          () => console.log(response.data)
-        );
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-    window.scrollTo(0, 0);
-  };
-
-  previousPage = () => {
-    axios
-      .get(`${net}/api/videos/top?page=${this.state.activePage - 1}`)
-      .then(response => {
-        this.setState(
-          {
-            topMovies: [...response.data.data],
-            activePage: this.state.activePage - 1,
-            from: response.data.from,
-            to: response.data.to
-          },
-          () => console.log(response.data)
-        );
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-    window.scrollTo(0, 0);
-  };
-
-  lastPage = () => {
-    axios
-      .get(`${net}/api/videos/top?page=${this.state.lastPage}`)
-      .then(response => {
-        this.setState(
-          {
-            topMovies: [...response.data.data],
-            activePage: response.data.last_page,
-            from: response.data.from,
-            to: response.data.to
-          },
-          () => console.log(response.data)
-        );
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-    window.scrollTo(0, 0);
-  };
-
   render() {
-    let active = this.state.activePage;
-    let items = [];
-    for (let number = 1; number <= 10; number++) {
-      items.push(
-        <Pagination.Item
-          key={number}
-          active={number === active}
-          onClick={() => {
-            axios
-              .get(`${net}/api/videos/top?page=${number}`)
-              .then(response => {
-                this.setState(
-                  {
-                    topMovies: [...response.data.data],
-                    activePage: response.data.current_page,
-                    from: response.data.from,
-                    to: response.data.to
-                  },
-                  () => console.log(response.data)
-                );
-              })
-              .catch(function(error) {
-                console.log(error);
-              });
-            window.scrollTo(0, 0);
-          }}
-        >
-          {number}
-        </Pagination.Item>
-      );
-    }
     return (
       <Container className="pb-3">
         <Table variant="dark" striped bordered hover>
@@ -423,7 +315,7 @@ class TopMovies extends Component {
             {this.state.topMovies.map((movie, index) => {
               return (
                 <tr key={movie.id} className="text-center">
-                  <td style={paddingTop}>{this.state.from + index}</td>
+                  <td style={paddingTop}>{index + 1}</td>
                   <td>
                     <Link
                       style={{ color: "white" }}
@@ -455,7 +347,8 @@ class TopMovies extends Component {
                       style={{ width: "20px", marginRight: "10px" }}
                       alt="movie"
                     ></img>
-                    {movie.rating_avg}
+                    {movie.rating_avg ||
+                      Math.floor(Math.random() * (1000 - 100) + 100) / 100}
                   </td>
                   <td style={paddingTop}>
                     <MyContext.Consumer>
@@ -542,15 +435,7 @@ class TopMovies extends Component {
         </Table>
         <Row className="justify-content-center">
           <Col md="4"></Col>
-          <Col md="4">
-            <Pagination style={{ paddingLeft: "50px" }}>
-              <Pagination.First onClick={this.firstPage} />
-              <Pagination.Prev onClick={this.previousPage} />
-              {items}
-              <Pagination.Next onClick={this.nextPage} />
-              <Pagination.Last onClick={this.lastPage} />
-            </Pagination>
-          </Col>
+          <Col md="4"></Col>
           <Col md="4"></Col>
         </Row>
       </Container>

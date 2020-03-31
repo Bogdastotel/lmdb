@@ -3,8 +3,11 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+import net from "./services";
 
-const net = "http://192.168.0.74:8000";
+// const net = "http://192.168.0.74:8000";
+
+// const net = "https://56831765.ngrok.io";
 
 class Registration extends Component {
   state = {

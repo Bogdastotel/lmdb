@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
+import { MyContext } from "./MyContext";
 
-class SearchedActorDetails extends Component {
+class SearchedDirectorDetails extends Component {
   goBack = () => {
     this.props.history.push(
       `/SearchedMovieList/${this.props.location.state.id}`
@@ -40,9 +41,30 @@ class SearchedActorDetails extends Component {
         <Button variant="outline-primary" onClick={this.goBack}>
           Go back
         </Button>
+
+        <MyContext.Consumer>
+          {context =>
+            context.admin === 2 ? (
+              <Button
+                variant="success"
+                className="ml-4"
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: "/EditDirector",
+                    state: {
+                      director: director[0]
+                    }
+                  })
+                }
+              >
+                Edit Director info
+              </Button>
+            ) : null
+          }
+        </MyContext.Consumer>
       </Container>
     );
   }
 }
 
-export default SearchedActorDetails;
+export default SearchedDirectorDetails;

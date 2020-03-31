@@ -3,10 +3,11 @@ import { useHistory } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import net from "./services";
 
-const net = "http://192.168.0.74:8000";
+// const net = "http://192.168.0.74:8000";
 
-// const net = "https://ac239f73.ngrok.io";
+// const net = "https://56831765.ngrok.io";
 
 export default function ViewDetails({ props, match }) {
   useEffect(() => {
