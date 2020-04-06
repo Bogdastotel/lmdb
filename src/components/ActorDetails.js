@@ -14,7 +14,7 @@ class ActorDetails extends Component {
         style={{
           paddingLeft: "20px",
           paddingTop: "20px",
-          color: "#B0B0B0"
+          color: "#B0B0B0",
         }}
       >
         {console.log(artist)}
@@ -46,12 +46,12 @@ class ActorDetails extends Component {
             this.props.history.push({
               pathname: "/EditActor",
               state: {
-                artist: artist
-              }
+                artist: artist,
+              },
             })
           }
         >
-          Edit Actor info
+          Edit Actor's Info
         </Button>
       </Container>
     );

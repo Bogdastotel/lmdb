@@ -7,10 +7,6 @@ import axios from "axios";
 import FormPage3 from "./FormPage3";
 import net from "./services";
 
-// const net = "http://192.168.0.74:8000";
-
-// const net = "https://56831765.ngrok.io";
-
 class Admin extends Component {
   constructor(props) {
     super(props);
@@ -34,14 +30,14 @@ class Admin extends Component {
       seasons: "",
       episodes: [],
       episodesPerSeason: "",
-      _method: "PUT"
+      _method: "PUT",
     };
   }
 
   componentDidMount() {
     axios
       .get(`${net}/api/videos/${this.props.location.state.id}`)
-      .then(res => {
+      .then((res) => {
         console.log(res);
         this.setState({
           video_type_id: res.data.video_type_id,
@@ -52,10 +48,10 @@ class Admin extends Component {
           release_date: res.data.release_date,
           country: res.data.country,
           plot: res.data.plot,
-          id: this.props.location.state.id
+          id: this.props.location.state.id,
         });
       })
-      .catch(errors => {
+      .catch((errors) => {
         // react on errors.
         console.log(errors);
       });
@@ -80,41 +76,41 @@ class Admin extends Component {
           this.setState({
             genresApi: [...responseGenres.data],
             director: [...responseDirectors.data],
-            artistsApi: [...responseArtists.data]
+            artistsApi: [...responseArtists.data],
           });
         })
       )
-      .catch(errors => {
+      .catch((errors) => {
         // react on errors.
         console.log(errors);
       });
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
-  fileSelectedHandler = event => {
+  fileSelectedHandler = (event) => {
     this.setState({
-      poster: event.target.files[0]
+      poster: event.target.files[0],
     });
   };
 
-  handleChangeDirectors = director => {
+  handleChangeDirectors = (director) => {
     this.setState({ director_id: director.value });
     console.log("director_id is ", director.value);
   };
 
-  handleChangeGenres = genres => {
-    let genresMapped = genres.map(genre => genre.value);
+  handleChangeGenres = (genres) => {
+    let genresMapped = genres.map((genre) => genre.value);
     this.setState({ genres: genresMapped });
     console.log("genres ", genresMapped);
   };
 
-  handleChangeActors = actors => {
-    let actorsMapped = actors.map(actor => actor.value);
+  handleChangeActors = (actors) => {
+    let actorsMapped = actors.map((actor) => actor.value);
 
     this.setState({ artists: actorsMapped }, () =>
       console.log("artists ", actorsMapped)
@@ -126,24 +122,24 @@ class Admin extends Component {
     episodes[index] = parseInt(value);
 
     this.setState({
-      episodes: episodes
+      episodes: episodes,
     });
   };
 
-  formUpload = event => {
+  formUpload = (event) => {
     event.preventDefault();
     const fd = new FormData();
     const user = JSON.parse(localStorage.getItem("user"));
 
-    this.state.artists.map(artist => {
+    this.state.artists.map((artist) => {
       fd.append("artists[]", artist);
     });
 
-    this.state.genres.map(genre => {
+    this.state.genres.map((genre) => {
       fd.append("genres[]", genre);
     });
 
-    this.state.episodes.map(episodePerSeason => {
+    this.state.episodes.map((episodePerSeason) => {
       fd.append("episodes[]", episodePerSeason);
     });
 
@@ -164,14 +160,14 @@ class Admin extends Component {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`
-        }
+          Authorization: `Bearer ${user.token}`,
+        },
       })
-      .then(res => {
+      .then((res) => {
         console.log(res);
         alert("video successfully uploaded!");
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };

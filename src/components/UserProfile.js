@@ -7,8 +7,6 @@ import { MyContext } from "./MyContext";
 import ConfirmDeleteProfile from "./ConfirmDeleteProfile";
 import net from "./services";
 
-// const net = "https://56831765.ngrok.io";
-
 export default class UserProfile extends Component {
   constructor() {
     super();
@@ -20,19 +18,19 @@ export default class UserProfile extends Component {
         email: "",
         currentPassword: "",
         newPassword: "",
-        newPassword_confirmation: ""
+        newPassword_confirmation: "",
       },
       errorsForm: {
         name: "",
         email: "",
         currentPassword: "",
-        newPassword: ""
+        newPassword: "",
         // newPassword_confirmation: ""
       },
       id: "",
       goodInput: false,
       userDeleted: false,
-      editPassword: false
+      editPassword: false,
     };
   }
 
@@ -46,24 +44,24 @@ export default class UserProfile extends Component {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`
-          }
+            Authorization: `Bearer ${user.token}`,
+          },
         })
-        .then(res => {
+        .then((res) => {
           this.setState(
             {
               fields: {
                 name: res.data.name,
                 surname: res.data.surname,
-                email: res.data.email
+                email: res.data.email,
               },
 
-              id: res.data.id
+              id: res.data.id,
             },
             () => console.log(res)
           );
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     }
@@ -81,11 +79,11 @@ export default class UserProfile extends Component {
           headers: {
             // Accept: "application/json",
             // "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`
-          }
+            Authorization: `Bearer ${user.token}`,
+          },
         })
         .then(
-          response => {
+          (response) => {
             console.log(response);
 
             this.setState(
@@ -95,23 +93,23 @@ export default class UserProfile extends Component {
                   email: "",
                   currentPassword: "",
                   newPassword: "",
-                  confirmedPassword: ""
-                }
+                  confirmedPassword: "",
+                },
               },
               () => alert("Succesfully updated profile ")
             );
           },
-          err =>
+          (err) =>
             // console.log({ ...err })
             {
               this.setState({
                 errorsForm: {
-                  ...err.response.data.errors
-                }
+                  ...err.response.data.errors,
+                },
               });
             }
         )
-        .catch(error => {
+        .catch((error) => {
           //return  error;
           console.log(error);
         });
@@ -125,14 +123,14 @@ export default class UserProfile extends Component {
 
   handleDel = () => {
     this.setState({
-      deleteProfile: false
+      deleteProfile: false,
     });
   };
 
   render() {
     return (
       <MyContext.Consumer>
-        {context => (
+        {(context) => (
           <Container className="text-center my-2" style={{ width: "600px" }}>
             <h3 style={{ color: "white" }} className="my-4">
               Edit profile
@@ -184,8 +182,8 @@ export default class UserProfile extends Component {
                 style={{ width: "100%" }}
                 className="mt-4"
                 onClick={() =>
-                  this.setState(prevState => ({
-                    editPassword: !prevState.editPassword
+                  this.setState((prevState) => ({
+                    editPassword: !prevState.editPassword,
                   }))
                 }
               >
@@ -204,7 +202,7 @@ export default class UserProfile extends Component {
                     />
                     <span
                       style={{
-                        color: "red"
+                        color: "red",
                       }}
                     >
                       {this.state.errorsForm["currentPassword"]}
@@ -221,7 +219,7 @@ export default class UserProfile extends Component {
 
                     <span
                       style={{
-                        color: "red"
+                        color: "red",
                       }}
                     >
                       {this.state.errorsForm["newPassword"]}
@@ -244,7 +242,7 @@ export default class UserProfile extends Component {
                     {this.state.errorsForm["newPassword"] ? (
                       <span
                         style={{
-                          color: "red"
+                          color: "red",
                         }}
                       >
                         {this.state.errorsForm["newPassword"]}

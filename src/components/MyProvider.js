@@ -2,12 +2,7 @@ import React from "react";
 import axios from "axios";
 import { withRouter } from "react-router";
 import { MyContext } from "./MyContext";
-// import { Redirect } from "react-router-dom";
 import net from "./services";
-
-// const net = "http://192.168.0.74:8000";
-
-// const net = "https://56831765.ngrok.io";
 
 class MyProvider extends React.Component {
   state = {
@@ -18,7 +13,7 @@ class MyProvider extends React.Component {
     admin: 1,
     loggedUserName: "",
     id: "",
-    deleteProfile: false
+    deleteProfile: false,
   };
 
   componentDidMount() {
@@ -38,35 +33,35 @@ class MyProvider extends React.Component {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`
-          }
+            Authorization: `Bearer ${user.token}`,
+          },
         })
-        .then(response => {
+        .then((response) => {
           // console.log(response);
           this.setState({
             authenticated: true,
             admin: response.data.role_id,
             name: response.data.name,
-            id: response.data.id
+            id: response.data.id,
           });
         });
     }
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
-  login = e => {
+  login = (e) => {
     e.preventDefault();
 
     const { from } = this.props.location.state || { from: { pathname: "/" } };
 
     const user = {
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password,
     };
     // `${net}/api/login`
 
@@ -75,10 +70,10 @@ class MyProvider extends React.Component {
       .post(`${net}/api/login`, user, {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       })
-      .then(response => {
+      .then((response) => {
         // return  response;
         console.log(response);
         this.setState(
@@ -87,7 +82,7 @@ class MyProvider extends React.Component {
             email: response.data.user.email,
             name: response.data.user.name,
             admin: response.data.user.role_id,
-            id: response.data.user.id
+            id: response.data.user.id,
           },
           () =>
             localStorage.setItem(
@@ -96,7 +91,7 @@ class MyProvider extends React.Component {
                 token: response.data.access_token,
                 name: response.data.user.name,
                 admin: response.data.user.role_id,
-                id: response.data.user.id
+                id: response.data.user.id,
               })
             )
         );
@@ -104,7 +99,7 @@ class MyProvider extends React.Component {
         // browserHistory.push();
         this.props.history.push(from);
       })
-      .catch(error => {
+      .catch((error) => {
         //return  error;
         console.log(error);
       });
@@ -118,18 +113,18 @@ class MyProvider extends React.Component {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`
-        }
+          Authorization: `Bearer ${user.token}`,
+        },
       })
-      .then(res => {
+      .then((res) => {
         console.log(res);
         this.setState({
           authenticated: false,
           name: "",
-          admin: 1
+          admin: 1,
         });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
 
@@ -137,8 +132,8 @@ class MyProvider extends React.Component {
   };
 
   deleteCurrentUser = () => {
-    this.setState(prevState => ({
-      deleteProfile: !prevState.deleteProfile
+    this.setState((prevState) => ({
+      deleteProfile: !prevState.deleteProfile,
     }));
   };
 
@@ -150,10 +145,10 @@ class MyProvider extends React.Component {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`
-        }
+          Authorization: `Bearer ${user.token}`,
+        },
       })
-      .then(response => {
+      .then((response) => {
         console.log(response);
 
         this.setState(
@@ -161,13 +156,13 @@ class MyProvider extends React.Component {
             authenticated: false,
             name: "",
             admin: 1,
-            deleteProfile: false
+            deleteProfile: false,
           },
           () => localStorage.removeItem("user")
         );
       })
       .then(this.props.history.push("SignIn"))
-      .catch(error => {
+      .catch((error) => {
         //return  error;
         console.log(error);
       });
@@ -189,7 +184,7 @@ class MyProvider extends React.Component {
           login: this.login,
           handleChange: this.handleChange,
           deleteCurrentUser: this.deleteCurrentUser,
-          confirmDeleteCurrentUser: this.confirmDeleteCurrentUser
+          confirmDeleteCurrentUser: this.confirmDeleteCurrentUser,
         }}
       >
         {this.props.children}

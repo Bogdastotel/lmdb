@@ -6,10 +6,6 @@ import net from "./services";
 import axios from "axios";
 import { MyContext } from "./MyContext";
 
-// const net = "http://192.168.0.74:8000";
-
-// const net = "https://56831765.ngrok.io";
-
 export default function ViewDetails2({ props, match }) {
   useEffect(() => {
     fetchItem();
@@ -29,7 +25,8 @@ export default function ViewDetails2({ props, match }) {
     director: [{}],
     genres: [{}],
     seasons: [{}],
-    type: {}
+    type: {},
+    videoID: match.params.id,
   });
 
   let history = useHistory();
@@ -44,15 +41,15 @@ export default function ViewDetails2({ props, match }) {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`
-        }
+          Authorization: `Bearer ${user.token}`,
+        },
       })
-      .then(res => {
+      .then((res) => {
         console.log(res);
         alert("video successfully deleted!");
       })
       .then(setTimeout(() => history.push("/"), 2000))
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
@@ -85,7 +82,7 @@ export default function ViewDetails2({ props, match }) {
               position: "relative",
               paddingBottom: "56.25%" /* 16:9 */,
               paddingTop: 25,
-              height: 0
+              height: 0,
             }}
           >
             <iframe
@@ -94,7 +91,7 @@ export default function ViewDetails2({ props, match }) {
                 top: 0,
                 left: 0,
                 width: "100%",
-                height: "100%"
+                height: "100%",
               }}
               src={item.trailer}
               frameBorder="0"
@@ -154,17 +151,17 @@ export default function ViewDetails2({ props, match }) {
             pathname: "/SearchedDirectorDetails",
             state: {
               director: item.director,
-              id: match.params.id
-            }
+              id: match.params.id,
+            },
           }}
         >
           {/* {console.log(item.director[0].surname)} */}
-          {item.director[0].name}
+          {item.director[0].name || "Not assigned"}
         </Link>
       </p>
       <p>
         <strong style={{ color: "white" }}>Actors: </strong>
-        {item.artists.map(artist => (
+        {item.artists.map((artist) => (
           <span style={{ marginRight: "15px" }} key={artist.id}>
             {/* <Link to={`/ViewDetails/${artist.id}`}>{artist.name}</Link> */}
             <Link
@@ -172,8 +169,8 @@ export default function ViewDetails2({ props, match }) {
                 pathname: "/SearchedActorDetails",
                 state: {
                   artist: artist,
-                  id: match.params.id
-                }
+                  id: match.params.id,
+                },
               }}
             >
               {artist.name}
@@ -197,7 +194,7 @@ export default function ViewDetails2({ props, match }) {
       </Link> */}
 
       <MyContext.Consumer>
-        {context =>
+        {(context) =>
           context.admin === 2 ? (
             <div style={{ display: "inline-block" }}>
               <Button
@@ -206,8 +203,8 @@ export default function ViewDetails2({ props, match }) {
                   history.push({
                     pathname: "/EditVideo",
                     state: {
-                      id: match.params.id
-                    }
+                      id: match.params.id,
+                    },
                   })
                 }
               >

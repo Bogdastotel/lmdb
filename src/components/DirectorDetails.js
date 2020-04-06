@@ -15,7 +15,7 @@ class DirectorDetails extends Component {
         style={{
           paddingLeft: "20px",
           paddingTop: "20px",
-          color: "white"
+          color: "white",
         }}
       >
         {console.log(director)}
@@ -38,7 +38,7 @@ class DirectorDetails extends Component {
         </Button>
 
         <MyContext.Consumer>
-          {context =>
+          {(context) =>
             context.admin === 2 ? (
               <Button
                 variant="success"
@@ -47,12 +47,12 @@ class DirectorDetails extends Component {
                   this.props.history.push({
                     pathname: "/EditDirector",
                     state: {
-                      director: director[0]
-                    }
+                      director: director[0],
+                    },
                   })
                 }
               >
-                Edit Director info
+                Edit Director's info
               </Button>
             ) : null
           }

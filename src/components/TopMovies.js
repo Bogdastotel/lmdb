@@ -17,12 +17,8 @@ import net from "./services";
 // require("bootstrap/less/bootstrap.less");
 
 const paddingTop = {
-  paddingTop: "35px"
+  paddingTop: "35px",
 };
-
-// const net = "http://192.168.0.74:8000";
-
-// const net = "https://56831765.ngrok.io";
 
 toast.configure();
 
@@ -39,7 +35,7 @@ class TopMovies extends Component {
       rating: 0,
       selectedVideoForRating: -1,
       ratedMovies: [],
-      watchlist: []
+      watchlist: [],
     };
   }
 
@@ -48,7 +44,7 @@ class TopMovies extends Component {
 
     axios
       .get(`${net}/api/videos/top`)
-      .then(response => {
+      .then((response) => {
         this.setState(
           {
             topMovies: [...response.data],
@@ -56,12 +52,12 @@ class TopMovies extends Component {
             lastPage: response.last_page,
             total: response.total,
             from: response.from,
-            to: response.to
+            to: response.to,
           },
           () => console.log(response.data)
         );
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
 
@@ -71,18 +67,18 @@ class TopMovies extends Component {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`
-          }
+            Authorization: `Bearer ${user.token}`,
+          },
         })
-        .then(res => {
+        .then((res) => {
           this.setState(
             {
-              watchlist: [...res.data.watchlist]
+              watchlist: [...res.data.watchlist],
             },
             () => console.log(res.data)
           );
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     }
@@ -92,13 +88,13 @@ class TopMovies extends Component {
     toast.info("Basic notification");
   };
 
-  changeRating = newRating => {
+  changeRating = (newRating) => {
     const user = JSON.parse(localStorage.getItem("user"));
     //
     // "http://25.32.37.187:8000/api/user/rate"
     this.setState(
       {
-        rating: newRating
+        rating: newRating,
       },
       () =>
         axios
@@ -106,54 +102,54 @@ class TopMovies extends Component {
             `${net}/api/user/rate`,
             {
               video_id: this.state.selectedVideoForRating,
-              rate: this.state.rating
+              rate: this.state.rating,
             },
             {
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${user.token}`
-              }
+                Authorization: `Bearer ${user.token}`,
+              },
             }
           )
           .then(
             toast.info("You rated a video!", {
               position: toast.POSITION.TOP_RIGHT,
-              autoClose: 2000
+              autoClose: 2000,
             })
           )
-          .then(res => {
+          .then((res) => {
             console.log(res);
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.log(error);
           })
     );
   };
 
-  deleteRating = movieId => {
+  deleteRating = (movieId) => {
     const user = JSON.parse(localStorage.getItem("user"));
     axios
       .post(
         `${net}/api/user/unrate`,
         {
-          video_id: movieId
+          video_id: movieId,
         },
         {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`
-          }
+            Authorization: `Bearer ${user.token}`,
+          },
         }
       )
       .then(
         toast.error("You deleted a rating for this video!", {
           position: toast.POSITION.TOP_RIGHT,
-          autoClose: 2000
+          autoClose: 2000,
         })
       )
-      .then(res => {
+      .then((res) => {
         if (this.state.rating === 0) {
           this.setState({ selectedVideoForRating: -1 });
         } else {
@@ -161,18 +157,18 @@ class TopMovies extends Component {
         }
       })
 
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
 
-  selectForRating = movieId => {
+  selectForRating = (movieId) => {
     const user = JSON.parse(localStorage.getItem("user"));
     // "http://25.32.37.187:8000/api/user/rates2"
     this.setState(
       {
         selectedVideoForRating: movieId,
-        rating: 0
+        rating: 0,
       },
       () =>
         axios
@@ -183,29 +179,29 @@ class TopMovies extends Component {
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${user.token}`
-              }
+                Authorization: `Bearer ${user.token}`,
+              },
             }
           )
-          .then(res => {
+          .then((res) => {
             res.status === 404
               ? this.setState({
                   rating: 0,
-                  selectedVideoForRating: movieId
+                  selectedVideoForRating: movieId,
                 })
-              : res.data.map(rated => {
+              : res.data.map((rated) => {
                   if (rated.video_id === movieId) {
                     this.setState(
                       {
                         rating: rated.rate,
-                        selectedVideoForRating: movieId
+                        selectedVideoForRating: movieId,
                       },
                       () => console.log(res)
                     );
                   }
                 });
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.log(error);
           })
     );
@@ -213,16 +209,16 @@ class TopMovies extends Component {
 
   handleDel = () => {
     this.setState({
-      selectedVideoForRating: -1
+      selectedVideoForRating: -1,
     });
     console.log("clicked outside");
   };
 
-  addToWatchList = movieId => {
+  addToWatchList = (movieId) => {
     const user = JSON.parse(localStorage.getItem("user"));
 
     let filteredWatchlist = this.state.watchlist.filter(
-      video => video !== movieId
+      (video) => video !== movieId
     );
 
     if (user !== null) {
@@ -232,63 +228,63 @@ class TopMovies extends Component {
             .post(
               `${net}/api/user/addToList`,
               {
-                video_id: movieId
+                video_id: movieId,
               },
               {
                 headers: {
                   Accept: "application/json",
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${user.token}`
-                }
+                  Authorization: `Bearer ${user.token}`,
+                },
               }
             )
-            .then(res => {
+            .then((res) => {
               this.setState({
-                watchlist: [...res.data.watchlist]
+                watchlist: [...res.data.watchlist],
               });
             })
             .then(
               toast.error("You deleted a video from your watchlist!", {
                 position: toast.POSITION.TOP_RIGHT,
-                autoClose: 2000
+                autoClose: 2000,
               })
             )
-            .catch(function(error) {
+            .catch(function (error) {
               console.log(error);
             })
         );
       } else
         this.setState(
           {
-            watchlist: [...this.state.watchlist, movieId]
+            watchlist: [...this.state.watchlist, movieId],
           },
           () =>
             axios
               .post(
                 `${net}/api/user/addToList`,
                 {
-                  video_id: movieId
+                  video_id: movieId,
                 },
                 {
                   headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${user.token}`
-                  }
+                    Authorization: `Bearer ${user.token}`,
+                  },
                 }
               )
-              .then(res => {
+              .then((res) => {
                 this.setState({
-                  watchlist: [...res.data.watchlist]
+                  watchlist: [...res.data.watchlist],
                 });
               })
               .then(
                 toast.success("You added a video to your watchlist!", {
                   position: toast.POSITION.TOP_RIGHT,
-                  autoClose: 2000
+                  autoClose: 2000,
                 })
               )
-              .catch(function(error) {
+              .catch(function (error) {
                 console.log(error);
               })
         );
@@ -325,7 +321,7 @@ class TopMovies extends Component {
                         src={movie.poster}
                         alt="movie_poster"
                         style={{ width: "50px" }}
-                        onError={e => {
+                        onError={(e) => {
                           e.target.onerror = null;
                           e.target.src =
                             "https://upload.wikimedia.org/wikipedia/en/c/c3/The_Martian_2014.jpg";
@@ -352,7 +348,7 @@ class TopMovies extends Component {
                   </td>
                   <td style={paddingTop}>
                     <MyContext.Consumer>
-                      {context =>
+                      {(context) =>
                         context.authenticated ? (
                           this.state.selectedVideoForRating !== movie.id ? (
                             <React.Fragment>
@@ -380,7 +376,7 @@ class TopMovies extends Component {
                           <Link
                             to={{
                               pathname: "/SignIn",
-                              state: { from: this.props.location }
+                              state: { from: this.props.location },
                             }}
                           >
                             {" "}
@@ -408,7 +404,7 @@ class TopMovies extends Component {
                           color: "lightgreen",
                           display: "inline-block",
                           marginLeft: "2rem",
-                          cursor: "pointer"
+                          cursor: "pointer",
                         }}
                         onClick={() => this.addToWatchList(movie.id)}
                       ></FontAwesomeIcon>
@@ -422,7 +418,7 @@ class TopMovies extends Component {
                           color: "lightblue",
                           display: "inline-block",
                           marginLeft: "2rem",
-                          cursor: "pointer"
+                          cursor: "pointer",
                         }}
                         onClick={() => this.addToWatchList(movie.id)}
                       ></FontAwesomeIcon>

@@ -5,10 +5,6 @@ import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import net from "./services";
 
-// const net = "http://192.168.0.74:8000";
-
-// const net = "https://56831765.ngrok.io";
-
 export default function ViewDetails({ props, match }) {
   useEffect(() => {
     fetchItem();
@@ -28,7 +24,7 @@ export default function ViewDetails({ props, match }) {
     director: [{}],
     genres: [{}],
     seasons: [{}],
-    type: {}
+    type: {},
   });
 
   let history = useHistory();
@@ -60,7 +56,7 @@ export default function ViewDetails({ props, match }) {
               position: "relative",
               paddingBottom: "56.25%" /* 16:9 */,
               paddingTop: 25,
-              height: 0
+              height: 0,
             }}
           >
             <iframe
@@ -69,7 +65,7 @@ export default function ViewDetails({ props, match }) {
                 top: 0,
                 left: 0,
                 width: "100%",
-                height: "100%"
+                height: "100%",
               }}
               src={item.trailer}
               frameBorder="0"
@@ -130,8 +126,8 @@ export default function ViewDetails({ props, match }) {
             pathname: "/DirectorDetails",
             state: {
               director: item.director,
-              id: match.params.id
-            }
+              id: match.params.id,
+            },
           }}
         >
           {item.director[0].name}
@@ -148,8 +144,8 @@ export default function ViewDetails({ props, match }) {
                 pathname: "/ActorDetails",
                 state: {
                   artist: artist,
-                  id: match.params.id
-                }
+                  id: match.params.id,
+                },
               }}
             >
               {artist.name}

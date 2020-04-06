@@ -65,6 +65,28 @@ class EditDirector extends Component {
     });
   };
 
+  deleteDirector = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    axios
+      .delete(`${net}/api/artists/${this.state.id}`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`
+        }
+      })
+      .then(res => {
+        console.log(res);
+        alert("Artist succesfully deleted!");
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    this.props.history.push("/");
+  };
+
   render() {
     const { director } = this.props.location.state;
     return (
@@ -178,6 +200,9 @@ class EditDirector extends Component {
         </Button>
         <Button className="mx-4" onClick={this.formUpload}>
           Submit
+        </Button>
+        <Button variant="danger" onClick={this.deleteDirector}>
+          Delete
         </Button>
       </Container>
     );

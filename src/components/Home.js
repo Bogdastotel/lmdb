@@ -10,10 +10,6 @@ import net from "./services";
 
 window.React = React;
 
-// const net = "http://192.168.0.74:8000";
-
-// const net = "https://56831765.ngrok.io";
-
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +20,7 @@ export default class Home extends React.Component {
       perPage: 20,
       genre: "",
       order: "",
-      direction: "asc"
+      direction: "asc",
     };
   }
 
@@ -43,20 +39,20 @@ export default class Home extends React.Component {
       dataType: "json",
       type: "GET",
 
-      success: data => {
+      success: (data) => {
         this.setState({
           data: data.videos,
-          pageCount: Math.ceil(data.total / 20)
+          pageCount: Math.ceil(data.total / 20),
         });
       },
 
       error: (xhr, status, err) => {
         console.error(this.state.url, status, err.toString()); // eslint-disable-line
-      }
+      },
     });
   }
 
-  handlePageClick = data => {
+  handlePageClick = (data) => {
     let selected = data.selected;
     let offset = Math.ceil(selected * this.state.perPage);
 
@@ -66,16 +62,16 @@ export default class Home extends React.Component {
     window.scrollTo(0, 0);
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  handleOrderChange = e => {
+  handleOrderChange = (e) => {
     this.setState(
       {
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
       },
       () => console.log(this.state.order)
     );
@@ -87,11 +83,11 @@ export default class Home extends React.Component {
         .get(
           `${this.state.url}?offset=${this.state.offset}&limit=${this.state.perPage}&ord=${this.state.order}&dir=${this.state.direction}`
         )
-        .then(res => {
+        .then((res) => {
           this.setState(
             {
               data: [...res.data.videos],
-              pageCount: Math.ceil(res.data.total / 20)
+              pageCount: Math.ceil(res.data.total / 20),
             },
             () => console.log(res)
           );
@@ -101,11 +97,11 @@ export default class Home extends React.Component {
         .get(
           `${this.state.url}?offset=${this.state.offset}&limit=${this.state.perPage}&genre=${this.state.genre}&dir=${this.state.direction}`
         )
-        .then(res => {
+        .then((res) => {
           this.setState(
             {
               data: [...res.data.videos],
-              pageCount: Math.ceil(res.data.total / 20)
+              pageCount: Math.ceil(res.data.total / 20),
             },
             () => console.log(res)
           );
@@ -115,11 +111,11 @@ export default class Home extends React.Component {
         .get(
           `${this.state.url}?offset=${this.state.offset}&limit=${this.state.perPage}&dir=${this.state.direction}`
         )
-        .then(res => {
+        .then((res) => {
           this.setState(
             {
               data: [...res.data.videos],
-              pageCount: Math.ceil(res.data.total / 20)
+              pageCount: Math.ceil(res.data.total / 20),
             },
             () => console.log(res)
           );
@@ -147,7 +143,7 @@ export default class Home extends React.Component {
             style={{
               height: "100px",
               display: "inline-block",
-              marginTop: "20px  "
+              marginTop: "20px  ",
             }}
           >
             <Form.Group>
@@ -177,7 +173,7 @@ export default class Home extends React.Component {
           <Col
             style={{
               height: "100px",
-              marginTop: "20px"
+              marginTop: "20px",
             }}
           >
             <Form.Group>
@@ -206,7 +202,7 @@ export default class Home extends React.Component {
                 style={{
                   color: "white",
                   textAlign: "center",
-                  marginTop: "20px"
+                  marginTop: "20px",
                 }}
               >
                 Direction:
@@ -228,7 +224,7 @@ export default class Home extends React.Component {
             style={{
               display: "inline-block",
               marginTop: "20px",
-              marginLeft: "10px"
+              marginLeft: "10px",
             }}
           >
             <Button onClick={this.onGoClick} style={{ marginTop: "30px" }}>

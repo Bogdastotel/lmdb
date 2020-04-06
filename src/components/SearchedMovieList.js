@@ -7,10 +7,6 @@ import ReactPaginate from "react-paginate";
 import net from "./services";
 window.React = React;
 
-// const net = "http://192.168.0.74:8000";
-
-// const net = "https://56831765.ngrok.io";
-
 class SearchedMovieList extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +15,7 @@ class SearchedMovieList extends React.Component {
       offset: 0,
       perPage: 20,
       url: `${net}/api/videos/search?query=${this.props.location.state.term}`,
-      term: this.props.location.state.term
+      term: this.props.location.state.term,
     };
   }
 
@@ -43,11 +39,11 @@ class SearchedMovieList extends React.Component {
       dataType: "json",
       type: "GET",
 
-      success: data => {
+      success: (data) => {
         this.setState(
           {
             data: data.videos,
-            pageCount: Math.ceil(data.total / 20)
+            pageCount: Math.ceil(data.total / 20),
           },
           () => console.log(this.state.data)
         );
@@ -55,11 +51,11 @@ class SearchedMovieList extends React.Component {
 
       error: (xhr, status, err) => {
         console.error(this.state.url, status, err.toString()); // eslint-disable-line
-      }
+      },
     });
   }
 
-  handlePageClick = data => {
+  handlePageClick = (data) => {
     let selected = data.selected;
     let offset = Math.ceil(selected * this.state.perPage);
 
