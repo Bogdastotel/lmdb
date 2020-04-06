@@ -3,6 +3,8 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import { MyContext } from "./MyContext";
 
+//class for showing up director details
+
 class DirectorDetails extends Component {
   goBack = () => {
     this.props.history.push(`/TopMovies/${this.props.location.state.id}`);
