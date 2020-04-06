@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import { MyContext } from "./MyContext";
 
-//class for showing up director details
+//class for showing up director's details
 
 class DirectorDetails extends Component {
   goBack = () => {
