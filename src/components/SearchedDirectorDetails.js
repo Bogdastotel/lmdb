@@ -3,6 +3,8 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import { MyContext } from "./MyContext";
 
+// searched director component
+
 class SearchedDirectorDetails extends Component {
   goBack = () => {
     this.props.history.push(
