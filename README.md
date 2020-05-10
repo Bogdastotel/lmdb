@@ -1,7 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 Preview: 
-<img  src="imdb.png" />
+<img  src="src/assets/imdb.png" />
 
 ## Available Scripts
 
