@@ -3,7 +3,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Preview: 
 <img  src="src/assets/imdb.png" />
 
-<img  src="src/assets/Screenshot(157).png" />
+<img  src="src/assets/Screenshot (157).png" />
 <img  src="src/assets/Screenshot(158).png" />
 <img  src="src/assets/Screenshot(159).png" />
 <img  src="src/assets/Screenshot(160).png" />
