@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 
+// actor details component
+
 class ActorDetails extends Component {
   goBack = () => {
     this.props.history.push(`/TopMovies/${this.props.location.state.id}`);

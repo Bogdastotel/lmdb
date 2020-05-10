@@ -1,3 +1,3 @@
-const net = "https://17a092a1.ngrok.io";
+const net = "https://a1e27ae7.ngrok.io";
 
 export default net;
