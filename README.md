@@ -4,11 +4,17 @@ Preview:
 <img  src="src/assets/imdb.png" />
 
 <img  src="src/assets/Screenshot (157).png" />
-<img  src="src/assets/Screenshot(158).png" />
-<img  src="src/assets/Screenshot(159).png" />
-<img  src="src/assets/Screenshot(160).png" />
-<img  src="src/assets/Screenshot(161).png" />
-<img  src="src/assets/Screenshot(162).png" />
+<img  src="src/assets/Screenshot (158).png" />
+<img  src="src/assets/Screenshot (159).png" />
+<img  src="src/assets/Screenshot (160).png" />
+<img  src="src/assets/Screenshot (161).png" />
+<img  src="src/assets/Screenshot (162).png" />
+<img  src="src/assets/Screenshot (163).png" />
+<img  src="src/assets/Screenshot (164).png" />
+<img  src="src/assets/Screenshot (165).png" />
+<img  src="src/assets/Screenshot (166).png" />
+<img  src="src/assets/Screenshot (167).png" />
+<img  src="src/assets/Screenshot (168).png" />
 
 ## Available Scripts
 
