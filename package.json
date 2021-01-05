@@ -11,7 +11,7 @@
     "@testing-library/react": "^9.4.1",
     "@testing-library/user-event": "^7.2.1",
     "@version/react-router-v3": "^1.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap-less": "^3.3.8",
     "browser-history": "^1.0.1",
     "font-awesome": "^4.7.0",
